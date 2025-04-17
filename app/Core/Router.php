@@ -88,7 +88,9 @@ class Router
 
                 $params = array_slice($matches, 1);    // on enemeve le premier car il ne nous sert pas trop ici (ici on a pas besoin de l'url)
 
-                $controller->$actionName(...$params);  // ! On veut extirper chaque élément du tableau et on va le passer comme paramètres
+                $response = $controller->$actionName(...$params);  // ! On veut extirper chaque élément du tableau et on va le passer comme paramètres
+
+                $response->send();
 
                 return;
             }

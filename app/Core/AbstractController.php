@@ -4,7 +4,7 @@ namespace App\Core;
 
 abstract class AbstractController
 {
-    protected function render(string $view, array $data = []): void // pk protected ? > on veut qu'elle soit héritée dans les classes filles
+    protected function render(string $view, array $data = []): Response // pk protected ? > on veut qu'elle soit héritée dans les classes filles
     {
         // Extraire les données pour les rendre accessibles dans la vue
 
@@ -15,6 +15,28 @@ abstract class AbstractController
         // var_dump($poste);
 
         // var_dump($data, $view);
+
+        // Rendre la vue
+        // Démarrer le buffer de sortie pour mettre en mémoire le contenu sans l'afficher
+        ob_start();
+
+        // Inclure le fichier de la vue
         require DIR_ROOT . '/Views/' . $view;
+
+        $content = ob_get_clean(); // on stocke le contenu du buffer dans une variable
+
+        // On redémarre le buffer de sortie
+        ob_start();
+
+        // Rendre le template de base
+        require DIR_ROOT . '/Views/base.php';
+
+        // On stock le contenu du buffer dans une variable
+        $finaleContent = ob_get_clean();
+
+        return new Response(
+            $finaleContent,
+            200,
+        );
     }
 }
