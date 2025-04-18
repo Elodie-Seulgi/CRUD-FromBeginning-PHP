@@ -17,6 +17,8 @@ class App
      */
     public function start(): void
     {
+        session_start();
+
         // On stocke l'URL du navigateur dans une variable
         $url = $_SERVER['REQUEST_URI'];
 

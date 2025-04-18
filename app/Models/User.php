@@ -16,6 +16,32 @@ class User extends Model
         $this->table = "users";
     }
 
+    public function connectUser(): self
+    {
+        // On stocke l'utilisateur dans la session
+        $_SESSION['USER'] = [
+            'id' => $this->id,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'email' => $this->email,
+            'roles' => $this->roles,
+        ];
+        return $this;
+    }
+
+    public function findOneByEmail(string $email): bool|self
+    {
+        $pdoStatement = $this
+            ->runQuery(
+                "SELECT * FROM {$this->table} WHERE email = :email",
+                [":email" => $email]
+            )
+            ->fetch();
+
+
+        return $this->fetchHydrate($pdoStatement);
+    }
+
     /**
      * Get the value of id
      *
@@ -187,8 +213,6 @@ class User extends Model
         } else {
             $this->roles = $roles;
         }
-
-        $this->roles = $roles;
 
         return $this;
     }

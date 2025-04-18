@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+
 abstract class AbstractController
 {
     protected function render(string $view, array $data = []): Response // pk protected ? > on veut qu'elle soit héritée dans les classes filles
@@ -39,4 +40,18 @@ abstract class AbstractController
             200,
         );
     }
+
+    protected function addFlash(string $type, string $message): void
+    {
+        $_SESSION['flash'][$type] = $message;
+
+    }
+
+    protected function redirectToRoute(string $name): Response
+    {
+        $url = (new Router)->getUrl($name);
+
+        return new Response('', 302, ['Location' => $url]);
+    }
 }
+

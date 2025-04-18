@@ -18,15 +18,4 @@ class HomeController extends AbstractController
         return $this->render('home/index.php');
     }
 
-    #[Route('app.test', '/test', ['GET'])]
-    public function test(): void
-    {
-        echo "Page de test";
-    }
-
-    #[Route('app.login', '/login', ['GET'])]
-    public function login(): void
-    {
-        echo "Page de login";
-    }
 }

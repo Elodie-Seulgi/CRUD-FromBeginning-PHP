@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <?php require 'Layout/_header.php'; ?>
     <main>
         <?= $content ?>
     </main>
