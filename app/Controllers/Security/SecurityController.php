@@ -54,4 +54,15 @@ class SecurityController extends AbstractController
             'form' => $form->createForm(),
         ]);
     }
+
+    #[Route('app.security.logout', '/logout', ['GET'])]
+    public function logout(): Response
+    {
+        // Déconnecter l'utilisateur
+        unset($_SESSION['USER']);
+
+        // TODO Rediriger vers la page d'accueil
+        return $this->redirectToRoute('app.home');
+
+    }
 }

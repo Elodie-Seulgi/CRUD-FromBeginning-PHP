@@ -17,6 +17,17 @@
                         <a class="nav-link" href="#">Postes</a>
                     </li>
                 </ul>
+                <ul class="navbar-nav">
+                    <?php if (!empty($_SESSION['USER'])): ?>
+                        <li class="nav-item">
+                            <a href="/logout" class="btn btn-danger">Déconnexion</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a href="/login" class="btn btn-light">Connexion</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
             </div>
         </div>
     </nav>
