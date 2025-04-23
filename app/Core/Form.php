@@ -2,9 +2,6 @@
 
 namespace App\Core;
 
-/**
- * Class de génération de formulaire
- */
 class Form
 {
     /**
@@ -14,9 +11,9 @@ class Form
 
     public static function validate(array $requireFields, array $submitFields): bool
     {
-        // ['email', 'password','lastName','firstName']
-        // ['email' => 'test@test.com', 'password' => 'test', 'lastName' => 'Doe', 'firstName' => 'Joe']
-        // TODO On boucle sur le tableau de champs obligatoires
+        // ['email', 'password', 'lastname', 'firstname']
+        // ['email' => 'test@test.com', 'password' => 'test', 'lastname' => 'Doe', 'firstname' => 'John']
+        // On boucle sur le tableau de champs obligatoires
         foreach ($requireFields as $requireField) {
             if (empty($submitFields[$requireField]) || strlen(trim($submitFields[$requireField])) === 0) {
                 return false;
@@ -28,14 +25,13 @@ class Form
 
     public function startForm(string $action, string $method = "POST", array $attributs = []): static
     {
-        // <form action="*" method="POST"
+        // <form action="#" method="POST">
         $this->formCode .= "<form action=\"$action\" method=\"$method\"";
 
         // On ajoute les attributs HTML potentiel
         $this->formCode .= $this->addAttributs($attributs) . '>';
 
         return $this;
-
     }
 
     public function endForm(): static
@@ -47,7 +43,7 @@ class Form
 
     public function startDiv(array $attributs = []): static
     {
-        $this->formCode .= '<div ' . $this->addAttributs($attributs) . '>';
+        $this->formCode .= '<div' . $this->addAttributs($attributs) . '>';
 
         return $this;
     }
@@ -61,24 +57,24 @@ class Form
 
     public function addLabel(string $for, string $text, array $attributs = []): static
     {
-        // <label for="email">Email</label>
-        $this->formCode .= "<label for=\"$for" . $this->addAttributs($attributs) . ">$text</label>";
+        // <label for="email">Email:</label>
+        $this->formCode .= "<label for=\"$for\"" . $this->addAttributs($attributs) . ">$text</label>";
 
         return $this;
     }
 
     public function addInput(string $type, string $name, array $attributs = []): static
     {
-        // <input type="email" name="email" id="email">
+        // <input type="email" name="email" id="email" />
         $this->formCode .= "<input type=\"$type\" name=\"$name\"" . $this->addAttributs($attributs) . '/>';
 
         return $this;
     }
 
-    public function addTextarea(string $name, string $content, array $attributs = []): static
+    public function addTextarea(string $name, ?string $content = null, array $attributs = []): static
     {
-        // <textarea name="description" id="description">CONTENU PAR DEFAUT</textarea>
-        $this->formCode .= "<textarea name=\"$name\"" . $this->addAttributs($attributs) . '>' . $content . '</textarea>';
+        // <textarea name="description" id="description">CONTENU PAR DÉFAUT</textarea>
+        $this->formCode .= "<textarea name=\"$name\"" . $this->addAttributs($attributs) . ">$content</textarea>";
 
         return $this;
     }
@@ -91,41 +87,34 @@ class Form
         return $this;
     }
 
-
-    /**
-     * 
-     * Ajoute les attributs envoyés à la balise html
-     * @return void
-     */
     public function addAttributs(array $attributs): string
     {
-        // On crée une chaîne de caractères vides
+        // On crée une chaîne de caractères vide
         $attributsString = '';
-        // On liste les attributs courts
-        $courts = ['checked', 'disabled', 'readonly', 'multiple', 'required', 'autofocus', 'novalidate', 'selected', 'formnovalidate'];
 
-        // On boucle sur le tableau d'attributs
+        $courts = ['checked', 'disabled', 'readonly', 'selected', 'multiple', 'required'];
+
         foreach ($attributs as $key => $value) {
-            // On crée une chaîne de caractères pour les attributs courts
-            if (in_array($key, $courts)) {
-                $attributsString .= " $key";
-            } else {
-                // On crée une chaîne de caractères pour les attributs longs
-                $attributsString .= $key . '="' . $value . '" ';
+            if ($value) {
+                // On vérifie si c'est un attribut court
+                if (in_array($key, $courts)) {
+                    $attributsString .= " $key";
+                } else {
+                    $attributsString .= " $key=\"$value\"";
+                }
             }
         }
+
         return $attributsString;
     }
 
-
     /**
      * Renvoie le code HTML du formulaire stocké dans la propriété $formCode
+     * 
      * @return string
      */
     public function createForm(): string
     {
         return $this->formCode;
     }
-
-
 }

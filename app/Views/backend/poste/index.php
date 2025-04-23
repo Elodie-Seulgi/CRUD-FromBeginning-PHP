@@ -14,8 +14,8 @@
                             <?= $poste->getCreatedAt()->format('d/m/Y') ?></em>
                         <p class="card-text"><?= $poste->getDescription() ?></p>
                         <div class="d-flex justify-content-between mt-3">
-                            <a href="/admin/poste/edit/<?= $poste->getId() ?>" class="btn btn-warning">Modifier</a>
-                            <a href="/admin/poste/delete/<?= $poste->getId() ?>" class="btn btn-danger">Supprimer</a>
+                            <a href="/admin/postes/<?= $poste->getId() ?>/edit" class="btn btn-warning">Modifier</a>
+                            <a href="/admin/postes/<?= $poste->getId() ?>/delete/" class="btn btn-danger">Supprimer</a>
                         </div>
                     </div>
                 </div>
