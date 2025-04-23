@@ -10,6 +10,7 @@
                         <h2 class="card-title"><?= $poste->getTitle() ?></h2>
                     </div>
                     <div class="card-body">
+                        <p class="card-text text-muted"><?= $poste->getUser()->getFullName(); ?></p>
                         <em class="card-subtitle text-muted">Créé le
                             <?= $poste->getCreatedAt()->format('d/m/Y') ?></em>
                         <p class="card-text"><?= $poste->getDescription() ?></p>

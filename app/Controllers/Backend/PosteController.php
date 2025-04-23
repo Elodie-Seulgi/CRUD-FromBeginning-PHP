@@ -41,6 +41,7 @@ class PosteController extends AbstractController
                 ->setTitle($title)
                 ->setDescription($description)
                 ->setEnabled($enabled)
+                ->setUserId($_SESSION['USER']['id'])
                 ->create();
 
             // On redirige vers la page d'accueil avec un message de succès
