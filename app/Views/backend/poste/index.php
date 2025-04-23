@@ -15,7 +15,12 @@
                         <p class="card-text"><?= $poste->getDescription() ?></p>
                         <div class="d-flex justify-content-between mt-3">
                             <a href="/admin/postes/<?= $poste->getId() ?>/edit" class="btn btn-warning">Modifier</a>
-                            <a href="/admin/postes/<?= $poste->getId() ?>/delete/" class="btn btn-danger">Supprimer</a>
+                            <form action="/admin/postes/<?= $poste->getId() ?>/delete" method="POST"
+                                onsubmit="return confirm('Voulez-vous vraiment supprimer ce poste ?')">
+                                <input type="hidden" name="csrf_token" value="<?= $token ?>" />
+                                <!-- pour éviter la faille csrf -->
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -16,7 +16,12 @@ class PosteController extends AbstractController
     {
         $postes = (new Poste)->findAll();
 
-        return $this->render('backend/poste/index.php', ['postes' => $postes]);
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(56));
+
+        return $this->render('backend/poste/index.php', [
+            'postes' => $postes,
+            'token' => $_SESSION['csrf_token'],
+        ]);
     }
 
     #[Route('admin.poste.create', '/admin/postes/create', ['GET', 'POST'])]
@@ -86,4 +91,24 @@ class PosteController extends AbstractController
 
     }
 
+    #[Route('admin.poste.delete', '/admin/postes/([0-9]+)/delete', ['POST'])]
+    public function delete(int $id): Response
+    {
+        $poste = (new Poste)->find($id);
+
+        // Si le poste n'existe pas, on redirige vers la page d'accueil avec un message d'erreur
+        if (!$poste) {
+            $this->addFlash('danger', 'Le poste n\'existe pas');
+            return $this->redirectToRoute('admin.poste.index');
+        }
+
+        // On vérifie le token CSRF
+        if ($_SESSION['csrf_token'] === $_POST['csrf_token'] ?? '') {
+            $poste->delete();
+            $this->addFlash('success', 'Le poste a bien été supprimé');
+        } else {
+            $this->addFlash('danger', 'Le token CSRF est invalide !');
+        }
+        return $this->redirectToRoute('admin.poste.index');
+    }
 }
