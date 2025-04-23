@@ -22,7 +22,7 @@ class Form
                 return false;
             }
         }
- 
+
         return true;
     }
 
@@ -71,6 +71,14 @@ class Form
     {
         // <input type="email" name="email" id="email">
         $this->formCode .= "<input type=\"$type\" name=\"$name\"" . $this->addAttributs($attributs) . '/>';
+
+        return $this;
+    }
+
+    public function addTextarea(string $name, string $content, array $attributs = []): static
+    {
+        // <textarea name="description" id="description">CONTENU PAR DEFAUT</textarea>
+        $this->formCode .= "<textarea name=\"$name\"" . $this->addAttributs($attributs) . '>' . $content . '</textarea>';
 
         return $this;
     }

@@ -77,8 +77,25 @@ class Router
 
     public function handleRequest(string $url, string $method): void
     {
+        // On vérifie si l'url du navigateur commence par /admin
+
+        if (preg_match("~^/admin~", $url)) {
+            // on vérifie si l'utilisateur n'est pas connecté et qu'il n'a pas le rôle ADMIN
+            if (empty($_SESSION['USER']) || !in_array('ROLE_ADMIN', $_SESSION['USER']['roles'])) {
+                $_SESSION['flash']['danger'] = "Vous n'avez pas accès à cette zone, veuillez-vous connecter avec un compte Admin";
+                // On redirige vers la page de connexion
+                $response = new Response('', 403, ['Location' => '/login']); // 403 >> forbidden
+                $response->send();
+
+                return;
+            }
+        }
+
+
         // On boucle sur toutes les routes de notre application
         foreach ($this->routes as $route) {
+
+
             // On vérifie si l'URL du navigateur correspond à une url dans notre routeur et si la méthode HTTP du navigateur correspond aux méthodes autorisées de la route
             if (preg_match('#^' . $route['url'] . '$#', $url, $matches) && in_array($method, $route['methods'])) {
                 // On appel le controller 
@@ -88,7 +105,7 @@ class Router
                 // On execute la méthode de la route
                 $actionName = $route['action'];
 
-                $params = array_slice($matches, 1);    // on enemeve le premier car il ne nous sert pas trop ici (ici on a pas besoin de l'url)
+                $params = array_slice($matches, 1);    // on enleve le premier car il ne nous sert pas trop ici (ici on a pas besoin de l'url)
 
                 $response = $controller->$actionName(...$params);  // ! On veut extirper chaque élément du tableau et on va le passer comme paramètres
 
